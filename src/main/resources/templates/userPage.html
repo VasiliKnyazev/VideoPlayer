@@ -1,0 +1,87 @@
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script th:src="@{videoRest.js}"></script>
+    <style>
+        body {
+            /*overflow-x: hidden;
+            overflow-y: hidden;*/
+            overflow: auto;
+        }
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .col-lg-2 {
+            height: 100vh;
+            padding-top: 25px;
+            padding-left: 30px;
+        }
+        .col-lg-12 {
+            height: 100vh;
+            padding-top: 25px;
+            padding-left: 50px;
+        }
+        .container-fluid {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+<!--navigation bar for project name and logout link-->
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-between">
+    <ul class="navbar-nav mr-auto">
+                        <span class="navbar-text">
+                            Video Player Project
+                        </span>
+    </ul>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="row">
+    <div class="col-lg-12" style="background-color:rgb(235,235,235);">
+        <h3>
+            <p>User page:</p>
+            <p>You logged in as: <span sec:authentication="name"></span></p>
+            <p>Name: <span th:text="${user.name}"></span></p>
+            <p>Email: <span th:text="${user.email}"></span></p>
+        </h3>
+        <center><div class="ui-widget">
+            <label for="tags">Search: </label>
+            <input id="tags" size = "75">
+            <button type="submit" onclick="findContent()">🔍</button>
+        </div>
+        <div id="videoContentId"></div></center>
+    </div>
+</div>
+
+<!--VIDEO MODAL-->
+<div id="videoModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content" style="background-color:rgb(235,235,235);">
+            <div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+            <div class="modal-body"><div id="videoModalContentId"></div></div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

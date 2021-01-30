@@ -1,0 +1,137 @@
+<html xmlns:=http://www.w3.org/1999/xhtml xmlns:c="http://www.w3.org/1999/XSL/Transform" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        .jumbotron{
+            height: 100vh;
+        }
+        .btn{
+            width: 270px;
+            height: 50px;
+        }
+        .container{
+            width: 300px;
+        }
+        .modal-body {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body onload='document.loginForm.login.focus();'>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h3>Please sign in</h3>
+
+        <h5 class="text-danger"><div th:switch="${not empty ${error}}" th:text="${error}"></div></h5>
+        <h5 class="text-success"><div th:switch="${not empty ${msg}}" th:text="${msg}"></div></h5>
+
+        <form name='loginForm' action="login" method='POST'> <c:url value='/login' />
+            <div class="form-group">
+                <label for="login"></label>
+                <input type='text' name='login' class="form-control" id="login" placeholder="Login or Email">
+            </div>
+            <div class="form-group">
+                <label for="password"></label>
+                <input type='password' name='password' class="form-control" id="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button><p>
+        </form>
+
+        <button type="button" class="btn btn-success" onclick="showRegisterModal()">Sign up</button>
+
+        <div id="userCanRetirementYearDiv"></div>
+    </div>
+    <div class="text-center" id="userCanRetirementYearDivInside"></div>
+</div>
+
+<!--REGISTER MODAL-->
+<div id="registerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="background-color:rgb(235,235,235);">
+            <div class="modal-header">
+                <h4 class="modal-title">Sign up</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><b>Login</b>
+                <p><input type="text" id="registerLogin">
+                <p><b>Name</b>
+                <p><input type="text" id="registerName">
+                <p><b>Password</b>
+                <p><input type="text" id="registerPass">
+                <p><b>Email</b>
+                <p><input type="text" id="registerEmail">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary registerSubmit">Register</button>
+            </div>
+            <div class="text-center" id="userRegisterModalDivInside"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+    //REGISTER
+    function showRegisterModal() {
+        $("#registerModal").modal('show');
+        $(".registerSubmit").click(function () {
+            let registerLogin = document.getElementById("registerLogin").value;
+            let registerName = document.getElementById("registerName").value;
+            let registerPass = document.getElementById("registerPass").value;
+            let registerEmail = document.getElementById("registerEmail").value;
+            if (registerLogin !== null && registerName !== null && registerPass !== null && registerEmail !== null &&
+                registerLogin !== "" && registerName !== "" && registerPass !== "" && registerEmail !== "") {
+                let registerRole = 'ROLE_USER';
+                let registerRoleId = 2;
+                $.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    type: 'POST',
+                    url: '/rest/user/register',
+                    data: JSON.stringify({
+                        name: registerName,
+                        login: registerLogin,
+                        password: registerPass,
+                        email: registerEmail,
+                        roles: [
+                            {
+                                id: registerRoleId,
+                                role: registerRole
+                            }
+                        ],
+                        enabled: true,
+                        username: registerLogin,
+                        accountNonExpired: true,
+                        accountNonLocked: true,
+                        credentialsNonExpired: true
+                    }),
+                    contentType: "application/json",
+                    dataType: 'json',
+                    success: function() {
+                        window.location.href = "/login";
+                    }
+                });
+            } else {
+                $('#userRegisterModalDivInside').empty().append('<wbr><h5>Not all required fields were filled</h5>');
+            }
+        });
+    }
+</script>
+
+</html>
