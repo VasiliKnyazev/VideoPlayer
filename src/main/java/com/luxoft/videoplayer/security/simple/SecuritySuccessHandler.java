@@ -1,5 +1,6 @@
-package com.luxoft.videoplayer.security;
+package com.luxoft.videoplayer.security.simple;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Set;
 
 @Component
+@Profile("simple")
 public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
